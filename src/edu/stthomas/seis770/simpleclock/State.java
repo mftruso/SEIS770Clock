@@ -3,15 +3,26 @@ package edu.stthomas.seis770.simpleclock;
 public abstract class State {
 	private SimpleClock myClock;
 	
-	private void increment(){}
+	public void increment(){
+		System.out.println("No specified action for increment() in this state.");
+	}
 	
-	private void decrement(){}
+	public void decrement(){
+		System.out.println("No specified action for decrement() in this state.");
+	}
 	
-	private void changeMode(){}
+	public void changeMode(){
+		System.out.println("No specified action for changeMode() in this state.");
+	}
 	
-	private void cancel(){}
+	public void cancel(){
+		System.out.println("No specified action for cancel() in this state.");
+	}
 	
-	private void timeTicker(){}
+	//TODO: should the timer be implemented here instead?
+	public void timeTicker(){
+		System.out.println("No specified action for timeTicker() in this state.");
+	}
 
 	
 	public SimpleClock getMyClock() {

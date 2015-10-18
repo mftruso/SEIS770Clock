@@ -3,11 +3,11 @@ package edu.stthomas.seis770.simpleclock;
 public class SetHoursState extends State {
 
 	SimpleClock  myClock;
-	
-	public SetHoursState(){}
-	
+		
 	public SetHoursState(SimpleClock myClock){
 		this.myClock = myClock;
+		this.myClock.highlightHours();
+		this.myClock.addStateButtons();
 	}
 	
 	public void increment(){
