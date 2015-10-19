@@ -6,6 +6,8 @@ public class DisplayTimeState extends State{
 	
 	public DisplayTimeState(SimpleClock myClock) {
 		this.myClock = myClock;
+		this.myClock.removeStateButtons();
+		this.myClock.removeHighlighting();
 	}
 	
 	public void changeMode(){

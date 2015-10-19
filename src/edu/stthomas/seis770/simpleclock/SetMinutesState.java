@@ -6,6 +6,7 @@ public class SetMinutesState extends State{
 	
 	public SetMinutesState(SimpleClock myClock) {
 		this.myClock = myClock;
+		this.myClock.highlightMinutes();
 	}
 	
 	public void increment(){

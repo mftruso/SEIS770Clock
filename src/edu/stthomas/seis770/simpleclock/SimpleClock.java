@@ -266,7 +266,26 @@ public class SimpleClock implements ActionListener{
 
 	public void highlightHours() {
 		hoursLabel.setForeground(modifyColor);
-		
+		minutesLabel.setForeground(normalColor);
+		secondsLabel.setForeground(normalColor);
+	}
+	
+	public void highlightMinutes(){
+		hoursLabel.setForeground(normalColor);
+		minutesLabel.setForeground(modifyColor);
+		secondsLabel.setForeground(normalColor);
+	}
+	
+	public void highlightSeconds(){
+		hoursLabel.setForeground(normalColor);
+		minutesLabel.setForeground(normalColor);
+		secondsLabel.setForeground(modifyColor);
+	}
+	
+	public void removeHighlighting(){
+		hoursLabel.setForeground(normalColor);
+		minutesLabel.setForeground(normalColor);
+		secondsLabel.setForeground(normalColor);
 	}
 	
 	//TODO: add other highlight and unhighlight methods here 
@@ -306,7 +325,10 @@ public class SimpleClock implements ActionListener{
 	}
 	
 	public void removeStateButtons(){
-		//TODO: reset the UI to the look for the DisplayTime state
+		Container pane = frame.getContentPane();
+		pane.remove(incrementButton);
+		pane.remove(decrementButton);
+		pane.remove(cancelButton);
 	}
 	
 }
