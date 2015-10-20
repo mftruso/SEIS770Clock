@@ -1,16 +1,21 @@
 package edu.stthomas.seis770.simpleclock;
 
 public class DisplayTimeState extends State{
-
-	SimpleClock  myClock;
+	private static volatile DisplayTimeState instance = null;
 	
-	public DisplayTimeState(SimpleClock myClock) {
-		this.myClock = myClock;
-		this.myClock.removeStateButtons();
-		this.myClock.removeHighlighting();
+	public static synchronized DisplayTimeState getInstance(){
+		if(instance == null){
+			instance = new DisplayTimeState();
+		}
+		return instance;
+	}
+	
+	public DisplayTimeState() {
 	}
 	
 	public void changeMode(){
-		myClock.changeState(new SetHoursState(myClock));
+		myClock.changeState(SetHoursState.getInstance());
+		myClock.highlightHours();
+		myClock.addStateButtons();
 	}
 }

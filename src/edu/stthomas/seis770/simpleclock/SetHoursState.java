@@ -2,12 +2,16 @@ package edu.stthomas.seis770.simpleclock;
 
 public class SetHoursState extends State {
 
-	SimpleClock  myClock;
+	private static volatile SetHoursState instance = null;
+	
+	public static synchronized SetHoursState getInstance(){
+		if(instance == null){
+			instance = new SetHoursState();
+		}
+		return instance;
+	}
 		
-	public SetHoursState(SimpleClock myClock){
-		this.myClock = myClock;
-		this.myClock.highlightHours();
-		this.myClock.addStateButtons();
+	public SetHoursState(){
 	}
 	
 	public void increment(){
@@ -19,10 +23,13 @@ public class SetHoursState extends State {
 	}
 	
 	public void changeMode(){
-		myClock.changeState(new SetMinutesState(myClock));
+		myClock.changeState(SetMinutesState.getInstance());
+		myClock.highlightMinutes();
 	}
 	
 	public void cancel(){
-		myClock.changeState(new DisplayTimeState(myClock));
+		myClock.changeState(DisplayTimeState.getInstance());
+		myClock.removeStateButtons();
+		myClock.removeHighlighting();
 	}
 }

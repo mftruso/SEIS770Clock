@@ -93,7 +93,13 @@ public class SimpleClock implements ActionListener{
 		cancelButton.addActionListener(this);
 		
 		//set the first state to DisplayTime
-		myState = new DisplayTimeState(this);
+		myState = DisplayTimeState.getInstance();
+		
+		//initialize all states and give it this instance of SimpleClock
+		DisplayTimeState.getInstance().setMyClock(this);
+		SetHoursState.getInstance().setMyClock(this);
+		SetMinutesState.getInstance().setMyClock(this);
+		SetSecondsState.getInstance().setMyClock(this);
 	}
 
 	public int getHours() {
@@ -175,7 +181,7 @@ public class SimpleClock implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 				
 		if(e.getSource() == timer){
-			//while in the SetSeconds state, don't continually update seconds fron the timer
+			//while in the SetSeconds state, don't continually update seconds from the timer
 			if(!"edu.stthomas.seis770.simpleclock.SetSecondsState".equals(myState.getClass().getName())){
 				incrementSeconds();
 			}

@@ -1,7 +1,7 @@
 package edu.stthomas.seis770.simpleclock;
 
 public abstract class State {
-	private SimpleClock myClock;
+	protected SimpleClock myClock;
 	
 	public void increment(){
 		System.out.println("No specified action for increment() in this state.");
