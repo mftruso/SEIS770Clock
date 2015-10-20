@@ -13,9 +13,14 @@ public class DisplayTimeState extends State{
 	public DisplayTimeState() {
 	}
 	
+	@Override
 	public void changeMode(){
 		myClock.changeState(SetHoursState.getInstance());
-		myClock.highlightHours();
-		myClock.addStateButtons();
+	}
+	
+	@Override
+	public void enter(){
+		myClock.removeStateButtons();
+		myClock.removeHighlighting();
 	}
 }

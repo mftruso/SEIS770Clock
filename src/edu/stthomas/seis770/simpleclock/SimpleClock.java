@@ -13,7 +13,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-import javax.swing.Timer;
 
 public class SimpleClock implements ActionListener{
 	private int hours;
@@ -27,8 +26,10 @@ public class SimpleClock implements ActionListener{
 	JLabel colonLabel1 = new JLabel(":", SwingConstants.CENTER);
 	JLabel colonLabel2 = new JLabel(":", SwingConstants.CENTER);
 	
-	
-	private Timer timer;
+	JButton changeModeButton;
+	JButton incrementButton;
+	JButton decrementButton;
+	JButton cancelButton;
 	
 	JFrame frame = new JFrame("Clock");
 	
@@ -37,10 +38,7 @@ public class SimpleClock implements ActionListener{
 	private static final Color modifyColor = Color.red;
 	private static final Color backgroundColor = Color.BLACK;
 	
-	JButton changeModeButton;
-	JButton incrementButton;
-	JButton decrementButton;
-	JButton cancelButton;
+	
 	
 	/** 
 	 * constructor
@@ -51,9 +49,6 @@ public class SimpleClock implements ActionListener{
 		hours = cal.get(Calendar.HOUR_OF_DAY);
 		minutes = cal.get(Calendar.MINUTE);
 		seconds = cal.get(Calendar.SECOND);
-		
-		//begin creating timed action events
-		startTimer();
 		
 		//initialize label values and look&feel
 		hoursLabel.setText(hours+"");
@@ -100,6 +95,9 @@ public class SimpleClock implements ActionListener{
 		SetHoursState.getInstance().setMyClock(this);
 		SetMinutesState.getInstance().setMyClock(this);
 		SetSecondsState.getInstance().setMyClock(this);
+		
+		//Create and begin the timer
+		SimpleTimer timer = new SimpleTimer(this);
 	}
 
 	public int getHours() {
@@ -114,7 +112,6 @@ public class SimpleClock implements ActionListener{
 	}
 
 	public int getMinutes() {
-		//System.out.println("Minutes: " + minutes);
 		if(minutes == 60){
 			minutes = 0;
 			incrementHours();
@@ -127,7 +124,6 @@ public class SimpleClock implements ActionListener{
 	}
 
 	public int getSeconds() {
-		//System.out.println("Seconds: " + seconds);
 		if(seconds == 60){
 			incrementMinutes();
 			seconds = 0;
@@ -136,8 +132,6 @@ public class SimpleClock implements ActionListener{
 	}
 
 	public void setSeconds(int seconds) {
-		//System.out.println("the new second is " + seconds);
-		//System.out.println("the old second is " + this.seconds);
 		this.seconds = seconds;
 	}
 
@@ -149,8 +143,15 @@ public class SimpleClock implements ActionListener{
 		this.myState = myState;
 	}
 
+	/**
+	 * When changing states, perform the current state's exit functions and the new state's enter functions
+	 * 
+	 * @param aState
+	 */
 	public void changeState(State aState) {
+		this.myState.exit();
 		myState = aState;
+		this.myState.enter();
 	}
 	
 	public void incrementHours(){
@@ -171,21 +172,19 @@ public class SimpleClock implements ActionListener{
 	
 	public void incrementSeconds(){
 		seconds++;
+		secondsLabel.setText(String.format("%02d", seconds));
 	}
 	
 	public void decrementSeconds(){
 		seconds--;
 	}
 
+	/**
+	 * Handles events performed in the UI
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-				
-		if(e.getSource() == timer){
-			//while in the SetSeconds state, don't continually update seconds from the timer
-			if(!"edu.stthomas.seis770.simpleclock.SetSecondsState".equals(myState.getClass().getName())){
-				incrementSeconds();
-			}
-		} else if(e.getSource() == changeModeButton){			
+		if(e.getSource() == changeModeButton){			
 			myState.changeMode();
 			System.out.println("My State: " + myState.getClass().getName());
 		} else if(e.getSource() == incrementButton){
@@ -203,23 +202,13 @@ public class SimpleClock implements ActionListener{
 		
 	}
 	
-	public void startTimer(){
-		if (timer == null) {
-	        //delay every 1000 milliseconds 
-			timer = new javax.swing.Timer(1000, this);
-	         timer.setInitialDelay(0);
-	         //start sending action events
-	         timer.start();
-	      } else if (!timer.isRunning()) {
-	         timer.restart();
-	      }
-	}
+
 	
 	public void createAndShowGUI() {
         //set up the window.
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
  
-        //Set up the content pane.
+        //Set up the content pane with buttons and labels
         addComponentsToPane(frame.getContentPane());
  
         //Display the window.
@@ -228,6 +217,11 @@ public class SimpleClock implements ActionListener{
         frame.setVisible(true);
     }
 
+	/**
+	 * Sets the initial UI components using the GridBagLayout
+	 * 
+	 * @param pane
+	 */
 	private void addComponentsToPane(Container pane) {
 		pane.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -293,9 +287,7 @@ public class SimpleClock implements ActionListener{
 		minutesLabel.setForeground(normalColor);
 		secondsLabel.setForeground(normalColor);
 	}
-	
-	//TODO: add other highlight and unhighlight methods here 
-	
+		
 	/**
 	 * in a state of changing the time, show these gui components
 	 */
@@ -303,7 +295,7 @@ public class SimpleClock implements ActionListener{
 		Container pane = frame.getContentPane();
 		GridBagConstraints c = new GridBagConstraints();
 		
-		//remote changeModeButton from its current position, and re-add in new position
+		//remove changeModeButton from its current position, and re-add in new position
 		pane.remove(changeModeButton);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -330,11 +322,21 @@ public class SimpleClock implements ActionListener{
 
 	}
 	
+	/**
+	 * When returning to the DisplayTimeState, hide the buttons to mutate the time
+	 */
 	public void removeStateButtons(){
 		Container pane = frame.getContentPane();
 		pane.remove(incrementButton);
 		pane.remove(decrementButton);
 		pane.remove(cancelButton);
+	}
+
+	/**
+	 * calls the current state to handle the timer tick.
+	 */
+	public void timerTick() {
+		myState.timeTicker();
 	}
 	
 }

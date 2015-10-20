@@ -15,23 +15,34 @@ public class SetSecondsState extends State{
 	public SetSecondsState() {
 	}
 	
+	@Override
 	public void increment(){
 		myClock.incrementSeconds();
 	}
 	
+	@Override
 	public void decrement(){
 		myClock.decrementSeconds();
 	}
 	
+	@Override
 	public void changeMode(){
 		myClock.changeState(DisplayTimeState.getInstance());
-		myClock.removeHighlighting();
-		myClock.removeStateButtons();
 	}
 	
+	@Override
 	public void cancel(){
 		myClock.changeState(SetMinutesState.getInstance());
-		myClock.highlightMinutes();
+	}
+	
+	@Override
+	public void enter(){
+		myClock.highlightSeconds();
+	}
+	
+	@Override
+	public void timeTicker(){
+		//do nothing when in this state
 	}
 
 }

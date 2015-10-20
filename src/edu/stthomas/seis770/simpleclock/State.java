@@ -19,9 +19,11 @@ public abstract class State {
 		System.out.println("No specified action for cancel() in this state.");
 	}
 	
-	//TODO: should the timer be implemented here instead?
+	/**
+	 * For every timer tick, the default action is to increment the seconds on the clock
+	 */
 	public void timeTicker(){
-		System.out.println("No specified action for timeTicker() in this state.");
+		myClock.incrementSeconds();
 	}
 
 	
@@ -31,4 +33,8 @@ public abstract class State {
 	public void setMyClock(SimpleClock myClock) {
 		this.myClock = myClock;
 	}
+	
+	public void enter(){}
+	
+	public void exit(){}
 }

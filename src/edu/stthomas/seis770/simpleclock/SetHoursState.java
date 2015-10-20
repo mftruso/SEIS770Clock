@@ -10,26 +10,32 @@ public class SetHoursState extends State {
 		}
 		return instance;
 	}
-		
+	
 	public SetHoursState(){
 	}
 	
+	@Override
 	public void increment(){
 		myClock.incrementHours();
 	}
 	
+	@Override
 	public void decrement(){
 		myClock.decrementHours();
 	}
 	
+	@Override
 	public void changeMode(){
 		myClock.changeState(SetMinutesState.getInstance());
-		myClock.highlightMinutes();
 	}
 	
+	@Override
 	public void cancel(){
 		myClock.changeState(DisplayTimeState.getInstance());
-		myClock.removeStateButtons();
-		myClock.removeHighlighting();
+	}
+	
+	public void enter(){
+		myClock.highlightHours();
+		myClock.addStateButtons();
 	}
 }
