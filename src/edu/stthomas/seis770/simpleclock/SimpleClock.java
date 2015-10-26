@@ -172,7 +172,7 @@ public class SimpleClock implements ActionListener{
 	
 	public void incrementSeconds(){
 		seconds++;
-		secondsLabel.setText(String.format("%02d", seconds));
+		updateLabels();
 	}
 	
 	public void decrementSeconds(){
@@ -195,11 +195,16 @@ public class SimpleClock implements ActionListener{
 			myState.cancel();
 		}
 		
-		//every time an action occurs, update the time labels
+		updateLabels();
+		
+	}
+	/**
+	 * every time an action occurs, update the time labels
+	 */
+	public void updateLabels(){
 		secondsLabel.setText(String.format("%02d", getSeconds()));
 		minutesLabel.setText(String.format("%02d", getMinutes()));
 		hoursLabel.setText(String.format("%02d", getHours()));	
-		
 	}
 	
 
